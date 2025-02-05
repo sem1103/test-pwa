@@ -27,6 +27,22 @@ export default function Home() {
   }, []);
 
 
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      // Показываем всплывающее окно для установки
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        setDeferredPrompt(null);
+      });
+    }
+  };
+
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
