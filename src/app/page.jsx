@@ -1,10 +1,38 @@
+'use client'
+
 import Image from "next/image";
 import styles from "./page.module.css";
 
+import { useEffect, useState } from 'react';
+
+
 export default function Home() {
+
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  useEffect(() => {
+    // Слушаем событие beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Отключаем стандартный запрос на установку
+      e.preventDefault();
+      // Сохраняем событие для использования позже
+      setDeferredPrompt(e);
+      // Показываем вашу кнопку установки
+      document.getElementById('installBtn').style.display = 'block';
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt');
+    };
+  }, []);
+
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+      <button id="installBtn" style={{ display: 'none' }} onClick={handleInstallClick}>
+        Установить приложение
+      </button>
         <Image
           className={styles.logo}
           src="/next.svg"
